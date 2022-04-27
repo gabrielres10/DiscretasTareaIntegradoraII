@@ -2,9 +2,9 @@ package model;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
+import java.util.Random;
 
-public class Person {
+public class Person implements Comparable<Person>{
 
 	
 
@@ -21,17 +21,26 @@ public class Person {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	public Person(String name, String lastName, Gender gender, LocalDate birthDate, double height, Nationality nationality,
-			String photo) {
+	/**
+	 * Random constructor
+	 * @param name
+	 * @param lastName
+	 */
+	public Person(String name, String lastName, String gender) {
 		this.name = name;
 		this.lastName = lastName;
-		this.gender = ramdomGender();
+		
+		Gender g = Gender.MALE;
+		if(gender.equals("FEMALE")) {
+			g = Gender.FEMALE;
+		}
+		
+		this.gender = g;
 		this.birthDate = ramdomDateBirt();
 		this.age = ramdomAge(this.birthDate);
 		this.height = ramdonHeight();
 		this.nationality = ramdomNationality();
-		this.photo = photo;
+		this.photo = null;
 	}
 	
 	
@@ -44,12 +53,31 @@ public class Person {
 	
 	private LocalDate ramdomDateBirt() {
 		
-		LocalDate birthDate = LocalDate.of((int)Math.random()*(2021-1925+1)+1925, (int)Math.random()*(12-0+1)+0, (int)Math.random()*(30-0+1)+0);
+		int year = 0;
+		
+		Random rand =  new Random();
+		
+		int percent = rand.nextInt(100);
+		
+		if(percent<19) {
+			year = (int)Math.random()*(2021-2008+1)+2008;
+		}else if(percent >= 19 && percent < 32) {
+			year = (int)Math.random()*(2007-1998+1)+1998;
+		}else if(percent >= 32 && percent < 71) {
+			year = (int)Math.random()*(1997-1968+1)+1968;
+		}else if(percent >= 71 && percent < 84) {
+			year = (int)Math.random()*(1967-1958+1)+1958;
+		}else if(percent >= 84) {
+			year = (int)Math.random()*(1957-1930+1)+1930;
+		}
+		
+		LocalDate birthDate = LocalDate.of(year, 1 +(int)Math.random()*(11), 1 + (int)Math.random()*(29));
 		
 		return birthDate;
 	}
 	
 	private int  ramdomAge(LocalDate birthDate) {
+		
 		Period edad = Period.between(birthDate, LocalDate.now());
 		
 		int age = edad.getYears();
@@ -57,11 +85,6 @@ public class Person {
 		return age;
 	}
 	
-	private Gender ramdomGender() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	private Nationality ramdomNationality() {
 		
@@ -71,6 +94,10 @@ public class Person {
 	}
 
 
+	/*
+	 * ---------Getters and Setters---------
+	 */
+	
 	public String getName() {
 		return name;
 	}
@@ -135,6 +162,33 @@ public class Person {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+
+	@Override
+	public int compareTo(Person p) {
+		int out = 0;
+		
+		if(name.compareTo(p.getName()) == 0) {
+			if(lastName.compareTo(p.getLastName())== 0) {
+				if(age == p.getAge()) {
+					if(height == p.getHeight()) {
+						
+					}else {
+						out = height>p.getHeight()? 1:-1;
+					}
+				}else {
+					out = age>p.getAge()? 1:-1;
+				}
+			}else {
+				out = lastName.compareTo(p.getLastName());
+			}
+		}else {
+			out = name.compareTo(p.getName());
+		}
+		
+		
+		return out;
 	}
 
 }
