@@ -12,17 +12,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		BufferedReader bf = null;
 		createFullNames(readNames(bf), readLastNames(bf));
-		/*AVLTree<Integer> arbolito = new AVLTree<>();
-		arbolito.insert(10);
-		arbolito.insert(5);
-		arbolito.insert(13);
-		arbolito.insert(1);
-		arbolito.insert(6);
-		arbolito.insert(17);
-		arbolito.insert(16);
-		arbolito.preOrden(arbolito.getRoot());
-		System.out.println("ya");*/
-		
 	}
 
 	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames) {
