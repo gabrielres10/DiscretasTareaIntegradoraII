@@ -16,25 +16,63 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BufferedReader bf = null;
-		createFullNames(readNames(bf), readLastNames(bf));
+		createFullNames(readNames(bf), readLastNames(bf), bf);
 	}
 
-	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames) {
+	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, BufferedReader bf) {
 		// TODO Auto-generated method stub
 		AVLTree<Person> fullNames = new AVLTree<>();
 		int namesLength = names.size();
 		int lastnamesLength = lastnames.size(); 
 		int x = 0;
+		int population = namesLength * lastnamesLength;
+		double[] popProp = readPopProp(bf);
 		String a = ".";
 		for(int i = 0; i<namesLength; i++) {
 			for(int j = 0; j<lastnamesLength; j++) {
-				//String name, String lastName, Gender gender, LocalDate birthDate, double height, Nationality nationality, String photo
-				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1]));
+				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1], population, popProp, x));
 				x++;
 			}
 			System.out.println(x);
 		}
 		System.out.println(x);
+	}
+
+	
+	private static double[] readPopProp(BufferedReader bf) {
+		// TODO Auto-generated method stub
+				double[] popProp = new double[55];
+
+				// Reads the information from a CSV file
+				try {
+					// Open .csv in buffer's reading mode
+					bf = new BufferedReader(new FileReader("data/pobProp.csv"));
+
+					// Read a file line
+					String currentLine = bf.readLine();
+
+					// if the line is not empty we keep reading the file
+					int i = 0;
+					while (currentLine != null) {
+						popProp[i] = Double.parseDouble(currentLine);
+						// Read the next file line
+						currentLine = bf.readLine();
+						i++;
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					// Close the buffer reader
+					if (bf != null) {
+						try {
+							bf.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				return popProp;
 	}
 
 	private static ArrayList<String> readLastNames(BufferedReader bf) {
