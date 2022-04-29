@@ -3,44 +3,75 @@ package ui;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
 import model.AVLTree;
+import model.Gender;
+import model.Nationality;
+import model.Person;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BufferedReader bf = null;
-		createFullNames(readNames(bf), readLastNames(bf));
-		/*AVLTree<Integer> arbolito = new AVLTree<>();
-		arbolito.insert(10);
-		arbolito.insert(5);
-		arbolito.insert(13);
-		arbolito.insert(1);
-		arbolito.insert(6);
-		arbolito.insert(17);
-		arbolito.insert(16);
-		arbolito.preOrden(arbolito.getRoot());
-		System.out.println("ya");*/
-		
+		createFullNames(readNames(bf), readLastNames(bf), readPopProp(bf));
 	}
 
-	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames) {
+	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, int[] popProp) {
 		// TODO Auto-generated method stub
-		AVLTree<String> fullNames = new AVLTree<>();
+		AVLTree<Person> fullNames = new AVLTree<>();
 		int namesLength = names.size();
 		int lastnamesLength = lastnames.size(); 
 		int x = 0;
+		int population = namesLength * lastnamesLength;
 		String a = ".";
 		for(int i = 0; i<namesLength; i++) {
 			for(int j = 0; j<lastnamesLength; j++) {
-				fullNames.insert(names.get(i) + "," + lastnames.get(j));
+				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1],popProp, x));
 				x++;
 			}
 			System.out.println(x);
 		}
-		System.out.println(x);
-		//System.out.println(fullNames.size());
+		System.out.println("x= " + x + " -  nQ=" + fullNames.getNodesQuant() + "height= "+ fullNames.getHeight(fullNames.getRoot()));
+	}
+
+	
+	private static int[] readPopProp(BufferedReader bf) {
+		// TODO Auto-generated method stub
+				int[] popProp = new int[55];
+
+				// Reads the information from a CSV file
+				try {
+					// Open .csv in buffer's reading mode
+					bf = new BufferedReader(new FileReader("data/pobProp.csv"));
+
+					// Read a file line
+					String currentLine = bf.readLine();
+
+					// if the line is not empty we keep reading the file
+					int i = 0;
+					while (currentLine != null) {
+						popProp[i] = Integer.parseInt(currentLine);
+						// Read the next file line
+						currentLine = bf.readLine();
+						i++;
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					// Close the buffer reader
+					if (bf != null) {
+						try {
+							bf.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				return popProp;
 	}
 
 	private static ArrayList<String> readLastNames(BufferedReader bf) {
@@ -95,9 +126,7 @@ public class Main {
 
 			// if the line is not empty we keep reading the file
 			while (currentLine != null) {
-				
-				String [] recordSplit = currentLine.split(",");
-				namesDB.add(recordSplit[0]);
+				namesDB.add(currentLine);
 				// Read the next file line
 				currentLine = bf.readLine();
 			}
