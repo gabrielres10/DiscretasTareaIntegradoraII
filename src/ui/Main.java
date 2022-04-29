@@ -3,18 +3,23 @@ package ui;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import model.AVLTree;
-import model.Gender;
-import model.Nationality;
 import model.Person;
 
-public class Main {
+public class Main extends Application{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		launch(args);
+		
 		BufferedReader bf = null;
 		createFullNames(readNames(bf), readLastNames(bf), readPopProp(bf));
 	}
@@ -145,6 +150,27 @@ public class Main {
 		}
 		
 		return namesDB;
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/SearchWindow.fxml"));
+
+		Parent parent = null;
+		try {
+			parent = (Parent) loader.load();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		Stage stage = new Stage();
+
+		Scene scene = new Scene(parent);
+
+		stage.setScene(scene);
+
+		stage.show();
 	}
 
 }

@@ -302,5 +302,18 @@ public class Person implements Comparable<Person>{
 		
 		return out;
 	}
+	/*
+	private String name;
+	private String lastName;
+	private Gender gender;
+	private LocalDate birthDate;
+	private int age;
+	private double height;
+	private Nationality nationality;
+	private String photo;
+	*/
+	public String toString() {
+		return "" + name + "," + lastName + "," + gender + "," + birthDate + "," + age + "," + height + ","+nationality + "," +photo;
+	}
 
 }
