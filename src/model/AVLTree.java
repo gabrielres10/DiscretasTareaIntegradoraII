@@ -3,18 +3,16 @@ package model;
 public class AVLTree<T extends Comparable<T>> {
 
 	private NodeAVL<T> root; // this is the root of the binary tree
-	private int nodesQuant;
+	private int height;
+
 	/**
 	 * Constructor method of the AVL tree
 	 */
 	public AVLTree() {
 		root = null;
+		height = 0;
 	}
 
-	public int getNodesQuant() {
-		return nodesQuant;
-	}
-	
 	/**
 	 * Gets the root of the AVL tree
 	 * 
@@ -150,7 +148,6 @@ public class AVLTree<T extends Comparable<T>> {
 	 *         root of the tree. This node contains the inserted node.
 	 */
 	public NodeAVL<T> insertAVL(NodeAVL<T> newNode, NodeAVL<T> subtree) {
-		
 		NodeAVL<T> newParent = subtree;
 		// If the value of the new node is smaller than the value of the subtree
 		if (newNode.getValue().compareTo(subtree.getValue()) == -1) {
@@ -163,6 +160,7 @@ public class AVLTree<T extends Comparable<T>> {
 				 **** Balance cases ****
 				 */
 				if (getBf(subtree.getLeftChild()) - getBf(subtree.getRightChild()) == 2) {
+					height--;
 					// When subtree (current parent) balance factor == -2
 					if (newNode.getValue().compareTo(subtree.getLeftChild().getValue()) == -1) {
 						// When current child balance factor == -1
@@ -184,6 +182,7 @@ public class AVLTree<T extends Comparable<T>> {
 				 **** Balance cases ****
 				 */
 				if (getBf(subtree.getRightChild()) - getBf(subtree.getLeftChild()) == 2) {
+					height--;
 					// When subtree (current parent) balance factor == 2
 					if (newNode.getValue().compareTo(subtree.getRightChild().getValue()) == 1) {
 						// When current child balance factor == 1
@@ -200,11 +199,15 @@ public class AVLTree<T extends Comparable<T>> {
 			// System.out.println("duplicated node");
 		}
 
+		// update height
+
 		// Uptade balance factor
 		if (subtree.getLeftChild() == null && subtree.getRightChild() != null) {
 			subtree.setBf(subtree.getRightChild().getBf() + 1);
+			height++;
 		} else if (subtree.getRightChild() == null && subtree.getLeftChild() != null) {
 			subtree.setBf(subtree.getLeftChild().getBf() + 1);
+			height++;
 		} else {
 			subtree.setBf(Math.max(getBf(subtree.getLeftChild()), getBf(subtree.getRightChild())) + 1);
 		}
@@ -219,7 +222,6 @@ public class AVLTree<T extends Comparable<T>> {
 	 * @param value, T, this is the value to be added to the tree
 	 */
 	public void insert(T value) {
-		nodesQuant++;
 		NodeAVL<T> newNode = new NodeAVL<>(value);
 		// In case this is the first insert in the tree
 		if (root == null) {
@@ -228,20 +230,6 @@ public class AVLTree<T extends Comparable<T>> {
 			root = insertAVL(newNode, root);
 		}
 	}
-	
-	
-	/**
-	 * This method gets the height of tree
-	 * @param node
-	 * @return
-	 */
-	public int getHeight(NodeAVL node) {
-		if(node==null) {
-			return 0;
-		}
-		return 1 + Math.max(getHeight(node.getLeftChild()), getHeight(node.getRightChild()));
-	}
-	
 
 	/**
 	 * This method shows the AVL tree in a preOrden way
@@ -254,6 +242,21 @@ public class AVLTree<T extends Comparable<T>> {
 			preOrden(root.getLeftChild());
 			preOrden(root.getRightChild());
 		}
+	}
+
+	public int height() {
+		return height(root);
+	}
+
+	/**
+	 * This method calculates the height of the AVL tree
+	 * 
+	 * @param root, (T) NodeAVL, this is the root of the tree
+	 * @return int, this is the height of the tree
+	 */
+	private int height(NodeAVL<T> root) {
+		// TODO Auto-generated method stub
+		return height;
 	}
 
 }

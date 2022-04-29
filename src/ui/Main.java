@@ -16,31 +16,53 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BufferedReader bf = null;
-		createFullNames(readNames(bf), readLastNames(bf), readPopProp(bf));
+		/*AVLTree<Integer> arbolito = new AVLTree<>();
+		arbolito.insert(10);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(5);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(13);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(1);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(6);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(17);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		arbolito.insert(16);
+		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
+		System.out.print("PREORDEN: ");
+		arbolito.preOrden(arbolito.getRoot());
+		System.out.println("Altura: " + arbolito.height());*/
+		
+		
+		createFullNames(readNames(bf), readLastNames(bf), bf);
 	}
 
-	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, int[] popProp) {
+	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, BufferedReader bf) {
 		// TODO Auto-generated method stub
 		AVLTree<Person> fullNames = new AVLTree<>();
 		int namesLength = names.size();
 		int lastnamesLength = lastnames.size(); 
 		int x = 0;
 		int population = namesLength * lastnamesLength;
+		double[] popProp = readPopProp(bf);
 		String a = ".";
 		for(int i = 0; i<namesLength; i++) {
 			for(int j = 0; j<lastnamesLength; j++) {
-				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1],popProp, x));
+				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1], population, popProp, x));
 				x++;
 			}
 			System.out.println(x);
 		}
-		System.out.println("x= " + x + " -  nQ=" + fullNames.getNodesQuant() + "height= "+ fullNames.getHeight(fullNames.getRoot()));
+		
+		System.out.println("height: "+ fullNames.height());
 	}
 
 	
-	private static int[] readPopProp(BufferedReader bf) {
+	private static double[] readPopProp(BufferedReader bf) {
 		// TODO Auto-generated method stub
-				int[] popProp = new int[55];
+				double[] popProp = new double[55];
 
 				// Reads the information from a CSV file
 				try {
@@ -53,7 +75,7 @@ public class Main {
 					// if the line is not empty we keep reading the file
 					int i = 0;
 					while (currentLine != null) {
-						popProp[i] = Integer.parseInt(currentLine);
+						popProp[i] = Double.parseDouble(currentLine);
 						// Read the next file line
 						currentLine = bf.readLine();
 						i++;
