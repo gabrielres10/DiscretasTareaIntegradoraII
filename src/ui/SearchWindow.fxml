@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.SearchWindow">
    <children>
       <TableView fx:id="seaarchTV" layoutX="48.0" layoutY="134.0" prefHeight="700.0" prefWidth="1500.0">
         <columns>
@@ -22,20 +23,60 @@
             <TableColumn fx:id="nationalityC" prefWidth="336.0" text="Nationality" />
         </columns>
       </TableView>
-      <TextField fx:id="searchTF" layoutX="154.0" layoutY="68.0" prefHeight="25.0" prefWidth="461.0" promptText="Search by CODE">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextField>
-      <ImageView fx:id="searchIMG" fitHeight="70.0" fitWidth="70.0" layoutX="60.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="searchIMG" fitHeight="70.0" fitWidth="70.0" layoutX="64.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../Resource/search.png" />
          </image>
       </ImageView>
-      <Button fx:id="addPersonBTN" layoutX="714.0" layoutY="68.0" mnemonicParsing="false" text="ADD">
+      <TextField fx:id="searchTF" layoutX="154.0" layoutY="69.0" onKeyPressed="#toLookFor" prefHeight="25.0" prefWidth="461.0" promptText="Search by Full Name">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="deletePersonIMG" fitHeight="70.0" fitWidth="70.0" layoutX="662.0" layoutY="46.0">
+         <image>
+            <Image url="@../../resource/delete-user.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="deletePersonBTN" layoutX="662.0" layoutY="46.0" mnemonicParsing="false" opacity="0.07" prefHeight="70.0" prefWidth="70.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
+      <Label layoutX="732.0" layoutY="56.0" prefHeight="58.0" prefWidth="145.0" text="DELETE">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="editPersonIMG" fitHeight="70.0" fitWidth="70.0" layoutX="993.0" layoutY="45.0">
+         <image>
+            <Image url="@../../resource/user.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="editPersonBTN" layoutX="993.0" layoutY="45.0" mnemonicParsing="false" opacity="0.07" prefHeight="70.0" prefWidth="70.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="1063.0" layoutY="55.0" prefHeight="58.0" prefWidth="145.0" text="EDIT">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="addPersonIMG" fitHeight="70.0" fitWidth="70.0" layoutX="1311.0" layoutY="50.0">
+         <image>
+            <Image url="@../../resource/add-user%20(2).png" />
+         </image>
+      </ImageView>
+      <Button fx:id="addPersonBTN" layoutX="1311.0" layoutY="50.0" mnemonicParsing="false" opacity="0.07" prefHeight="70.0" prefWidth="70.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="1381.0" layoutY="60.0" prefHeight="58.0" prefWidth="145.0" text="ADD">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

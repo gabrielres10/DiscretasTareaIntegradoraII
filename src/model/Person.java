@@ -1,15 +1,18 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Random;
 
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person>, Serializable{
 
-	public static int population = 6782 * 162253;
+	private static final long serialVersionUID = 1L;
+
 
 	private String name;
 	private String lastName;
+	private String fullName;
 	private Gender gender;
 	private LocalDate birthDate;
 	private int age;
@@ -29,7 +32,7 @@ public class Person implements Comparable<Person>{
 	public Person(String name, String lastName, String gender, int[] popProp,int nationality) {
 		this.name = name;
 		this.lastName = lastName;
-		
+		this.fullName = name + " " + lastName;
 		Gender g = Gender.MALE;
 		if(gender.equals("FEMALE")) {
 			g = Gender.FEMALE;
@@ -44,9 +47,28 @@ public class Person implements Comparable<Person>{
 	}
 	
 	
+	public Person(String fullName) {
+		this.name = "";
+		this.lastName = "";
+		this.fullName = fullName;
+		this.gender = null;
+		this.birthDate = null;
+		this.age = 0;
+		this.height = 0;
+		this.nationality = null;
+		this.photo = null;
+	}
 	
 	
 	
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	private double ramdonHeight() {
 		return (double)Math.random()*(2.01-1.49+1)+1.49;
 	}
@@ -75,6 +97,9 @@ public class Person implements Comparable<Person>{
 		
 		return birthDate;
 	}
+	
+	
+	
 	
 	private int  ramdomAge(LocalDate birthDate) {
 		
@@ -283,15 +308,7 @@ public class Person implements Comparable<Person>{
 		
 		if(name.compareTo(p.getName()) == 0) {
 			if(lastName.compareTo(p.getLastName())== 0) {
-				if(age == p.getAge()) {
-					if(height == p.getHeight()) {
-						
-					}else {
-						out = height>p.getHeight()? 1:-1;
-					}
-				}else {
-					out = age>p.getAge()? 1:-1;
-				}
+				return 0;
 			}else {
 				out = lastName.compareTo(p.getLastName());
 			}
@@ -302,16 +319,7 @@ public class Person implements Comparable<Person>{
 		
 		return out;
 	}
-	/*
-	private String name;
-	private String lastName;
-	private Gender gender;
-	private LocalDate birthDate;
-	private int age;
-	private double height;
-	private Nationality nationality;
-	private String photo;
-	*/
+	
 	public String toString() {
 		return "" + name + "," + lastName + "," + gender + "," + birthDate + "," + age + "," + height + ","+nationality + "," +photo;
 	}

@@ -1,9 +1,15 @@
 package model;
 
-public class AVLTree<T extends Comparable<T>> {
+import java.io.Serializable;
+
+import javafx.collections.ObservableList;
+
+public class AVLTree<T extends Comparable<T>> implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private NodeAVL<T> root; // this is the root of the binary tree
-	private int nodesQuant;
+
 	/**
 	 * Constructor method of the AVL tree
 	 */
@@ -11,10 +17,6 @@ public class AVLTree<T extends Comparable<T>> {
 		root = null;
 	}
 
-	public int getNodesQuant() {
-		return nodesQuant;
-	}
-	
 	/**
 	 * Gets the root of the AVL tree
 	 * 
@@ -41,20 +43,22 @@ public class AVLTree<T extends Comparable<T>> {
 	 *                 time it will always be the root of the node
 	 * @return (T) NodeAVL, this is the node that contains the searched value
 	 */
-	public NodeAVL<T> search(T value, NodeAVL<T> current) {
+	public NodeAVL<Person> search(Person value, NodeAVL<Person> current, String toSearch) {
 		// Stop conditions of the search method
 		if (this.root == null) {
 			return null;
-		} else if (current.getValue().equals(value)) {
+		} else if (current.getValue().getFullName().substring(0, toSearch.length()).equals(toSearch)) {
 			return current;
 			// Iteration of the search method
 		} else if ((current.getValue()).compareTo(value) == -1) {
 			// if the value of the current node is smaller than the value that is being
 			// searched
-			return search(value, current.getRightChild());
-		} else {
+			return search(value, current.getRightChild(), toSearch);
+		} else if ((current.getValue()).compareTo(value) == 1){
 			// the value of the current node is bigger
-			return search(value, current.getLeftChild());
+			return search(value, current.getLeftChild(), toSearch);
+		}else {
+			return current;
 		}
 	}
 
@@ -150,7 +154,7 @@ public class AVLTree<T extends Comparable<T>> {
 	 *         root of the tree. This node contains the inserted node.
 	 */
 	public NodeAVL<T> insertAVL(NodeAVL<T> newNode, NodeAVL<T> subtree) {
-		
+
 		NodeAVL<T> newParent = subtree;
 		// If the value of the new node is smaller than the value of the subtree
 		if (newNode.getValue().compareTo(subtree.getValue()) == -1) {
@@ -219,7 +223,6 @@ public class AVLTree<T extends Comparable<T>> {
 	 * @param value, T, this is the value to be added to the tree
 	 */
 	public void insert(T value) {
-		nodesQuant++;
 		NodeAVL<T> newNode = new NodeAVL<>(value);
 		// In case this is the first insert in the tree
 		if (root == null) {
@@ -228,20 +231,19 @@ public class AVLTree<T extends Comparable<T>> {
 			root = insertAVL(newNode, root);
 		}
 	}
-	
-	
+
 	/**
 	 * This method gets the height of tree
+	 * 
 	 * @param node
 	 * @return
 	 */
 	public int getHeight(NodeAVL node) {
-		if(node==null) {
+		if (node == null) {
 			return 0;
 		}
-		return 1 + Math.max(getHeight(node.getLeftChild()), getHeight(node.getRightChild()));
+		return Math.max(getHeight(node.getLeftChild()) + 1, getHeight(node.getRightChild()) + 1);
 	}
-	
 
 	/**
 	 * This method shows the AVL tree in a preOrden way

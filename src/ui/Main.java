@@ -1,82 +1,111 @@
 package ui;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.AVLTree;
+import model.Hilo;
 import model.Person;
 
-public class Main extends Application{
+public class Main{
+
+	public static String personDataPath = "data/personDataPeque.csv";
+
+	public static AVLTree<Person> personData;
+	
+	public static ObservableList<Person> listaDeCoicidencias = FXCollections.observableArrayList();
+
+	public static String toSearch;//Buscar en el nombre.subString(toSearch.lenght)
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		launch(args);
-		
+
 		BufferedReader bf = null;
-		createFullNames(readNames(bf), readLastNames(bf), readPopProp(bf));
-	}
-
-	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, int[] popProp) {
-		// TODO Auto-generated method stub
-		AVLTree<Person> fullNames = new AVLTree<>();
-		int namesLength = names.size();
-		int lastnamesLength = lastnames.size(); 
-		int x = 0;
-		int population = namesLength * lastnamesLength;
-		String a = ".";
-		for(int i = 0; i<namesLength; i++) {
-			for(int j = 0; j<lastnamesLength; j++) {
-				fullNames.insert(new Person(names.get(i).split(",")[0], lastnames.get(j), names.get(i).split(",")[1],popProp, x));
-				x++;
-			}
-			System.out.println(x);
+		try {
+			createFullNames(readNames(bf), readLastNames(bf), readPopProp(bf));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println("x= " + x + " -  nQ=" + fullNames.getNodesQuant() + "height= "+ fullNames.getHeight(fullNames.getRoot()));
+
+		Thread hiloGrafico = new Thread(new Hilo());
+
+		hiloGrafico.start();
+		
+		
+		listaDeCoicidencias.add(buscarCoincidencias());
+
 	}
 
+	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, int[] popProp)
+			throws Exception {
+		// TODO Auto-generated method stub
+		personData = new AVLTree<>();
+		int namesLength = names.size();
+		int lastnamesLength = lastnames.size();
+		int x = 0;
+		BufferedWriter writer = new BufferedWriter(new FileWriter(personDataPath));
+		for (int i = 0; i < namesLength; i++) {
+			for (int j = 0; j < lastnamesLength; j++) {
+				Person current = new Person(names.get(i + (int) Math.random() * namesLength).split(",")[0],
+						lastnames.get(j + (int) Math.random() * lastnamesLength),
+						names.get(i + (int) Math.random() * namesLength).split(",")[1], popProp, x);
+				writer.write(current.toString() + "\n");
+				personData.insert(current);
+				x++;
+				if (x == 1048576) {
+					i = namesLength;
+					j = lastnamesLength;
+				}
+			}
+		}
+		writer.close();
+	}
 	
+	public static Person buscarCoincidencias() {
+		return personData.search(new Person(toSearch),personData.getRoot(),toSearch).getValue();
+	}
+
 	private static int[] readPopProp(BufferedReader bf) {
 		// TODO Auto-generated method stub
-				int[] popProp = new int[55];
+		int[] popProp = new int[55];
 
-				// Reads the information from a CSV file
+		// Reads the information from a CSV file
+		try {
+			// Open .csv in buffer's reading mode
+			bf = new BufferedReader(new FileReader("data/popPropPeque.csv"));
+
+			// Read a file line
+			String currentLine = bf.readLine();
+
+			// if the line is not empty we keep reading the file
+			int i = 0;
+			while (currentLine != null) {
+				popProp[i] = Integer.parseInt(currentLine);
+				// Read the next file line
+				currentLine = bf.readLine();
+				i++;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			// Close the buffer reader
+			if (bf != null) {
 				try {
-					// Open .csv in buffer's reading mode
-					bf = new BufferedReader(new FileReader("data/pobProp.csv"));
-
-					// Read a file line
-					String currentLine = bf.readLine();
-
-					// if the line is not empty we keep reading the file
-					int i = 0;
-					while (currentLine != null) {
-						popProp[i] = Integer.parseInt(currentLine);
-						// Read the next file line
-						currentLine = bf.readLine();
-						i++;
-					}
-
+					bf.close();
 				} catch (IOException e) {
 					e.printStackTrace();
-				} finally {
-					// Close the buffer reader
-					if (bf != null) {
-						try {
-							bf.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
 				}
-				return popProp;
+			}
+		}
+		return popProp;
 	}
 
 	private static ArrayList<String> readLastNames(BufferedReader bf) {
@@ -94,8 +123,8 @@ public class Main extends Application{
 			// if the line is not empty we keep reading the file
 			int i = 0;
 			while (currentLine != null) {
-				if(i!=0 && i!=162254) {
-					String [] recordSplit = currentLine.split(",");
+				if (i != 0 && i != 162254) {
+					String[] recordSplit = currentLine.split(",");
 					lastnamesDB.add(recordSplit[0]);
 				}
 				// Read the next file line
@@ -148,29 +177,8 @@ public class Main extends Application{
 				}
 			}
 		}
-		
+
 		return namesDB;
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("../ui/SearchWindow.fxml"));
-
-		Parent parent = null;
-		try {
-			parent = (Parent) loader.load();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		Stage stage = new Stage();
-
-		Scene scene = new Scene(parent);
-
-		stage.setScene(scene);
-
-		stage.show();
 	}
 
 }
