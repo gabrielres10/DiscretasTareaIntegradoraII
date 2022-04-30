@@ -3,45 +3,36 @@ package ui;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.AVLTree;
-import model.Gender;
-import model.Nationality;
 import model.Person;
+import model.RedBlackTree;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BufferedReader bf = null;
-		/*AVLTree<Integer> arbolito = new AVLTree<>();
+		/*RedBlackTree<Integer> arbolito = new RedBlackTree<>();
 		arbolito.insert(10);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(5);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(13);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(1);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(6);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(17);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		arbolito.insert(16);
-		System.out.println("factor de balanceo: " + arbolito.getBf(arbolito.getRoot()));
 		System.out.print("PREORDEN: ");
 		arbolito.preOrden(arbolito.getRoot());
-		System.out.println("Altura: " + arbolito.height());*/
-		
+		//System.out.println("Altura: " + arbolito.height());
+		*/
 		
 		createFullNames(readNames(bf), readLastNames(bf), bf);
 	}
 
 	private static void createFullNames(ArrayList<String> names, ArrayList<String> lastnames, BufferedReader bf) {
 		// TODO Auto-generated method stub
-		AVLTree<Person> fullNames = new AVLTree<>();
+		RedBlackTree<Person> fullNames = new RedBlackTree<>();
 		int namesLength = names.size();
 		int lastnamesLength = lastnames.size(); 
 		int x = 0;
@@ -56,7 +47,7 @@ public class Main {
 			System.out.println(x);
 		}
 		
-		System.out.println("height: "+ fullNames.height());
+		//System.out.println("height: "+ fullNames.height());
 	}
 
 	
