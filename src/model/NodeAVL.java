@@ -1,11 +1,6 @@
 package model;
 
-import java.io.Serializable;
-
-public class NodeAVL<T> implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
+public class NodeAVL<T> {
 	private T value; // this is the value that the node contains
 	private int bf; // this is the balance factor of the node
 	private NodeAVL<T> leftChild; // this is the left child of the node

@@ -1,20 +1,16 @@
 package model;
 
-import java.io.Serializable;
-
-import javafx.collections.ObservableList;
-
-public class AVLTree<T extends Comparable<T>> implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class AVLTree<T extends Comparable<T>> {
 
 	private NodeAVL<T> root; // this is the root of the binary tree
+	private int height;
 
 	/**
 	 * Constructor method of the AVL tree
 	 */
 	public AVLTree() {
 		root = null;
+		height = 0;
 	}
 
 	/**
@@ -43,22 +39,20 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 	 *                 time it will always be the root of the node
 	 * @return (T) NodeAVL, this is the node that contains the searched value
 	 */
-	public NodeAVL<Person> search(Person value, NodeAVL<Person> current, String toSearch) {
+	public NodeAVL<T> search(T value, NodeAVL<T> current) {
 		// Stop conditions of the search method
 		if (this.root == null) {
 			return null;
-		} else if (current.getValue().getFullName().substring(0, toSearch.length()).equals(toSearch)) {
+		} else if (current.getValue().equals(value)) {
 			return current;
 			// Iteration of the search method
 		} else if ((current.getValue()).compareTo(value) == -1) {
 			// if the value of the current node is smaller than the value that is being
 			// searched
-			return search(value, current.getRightChild(), toSearch);
-		} else if ((current.getValue()).compareTo(value) == 1){
+			return search(value, current.getRightChild());
+		} else {
 			// the value of the current node is bigger
-			return search(value, current.getLeftChild(), toSearch);
-		}else {
-			return current;
+			return search(value, current.getLeftChild());
 		}
 	}
 
@@ -154,7 +148,6 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 	 *         root of the tree. This node contains the inserted node.
 	 */
 	public NodeAVL<T> insertAVL(NodeAVL<T> newNode, NodeAVL<T> subtree) {
-
 		NodeAVL<T> newParent = subtree;
 		// If the value of the new node is smaller than the value of the subtree
 		if (newNode.getValue().compareTo(subtree.getValue()) == -1) {
@@ -167,6 +160,7 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 				 **** Balance cases ****
 				 */
 				if (getBf(subtree.getLeftChild()) - getBf(subtree.getRightChild()) == 2) {
+					height--;
 					// When subtree (current parent) balance factor == -2
 					if (newNode.getValue().compareTo(subtree.getLeftChild().getValue()) == -1) {
 						// When current child balance factor == -1
@@ -188,6 +182,7 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 				 **** Balance cases ****
 				 */
 				if (getBf(subtree.getRightChild()) - getBf(subtree.getLeftChild()) == 2) {
+					height--;
 					// When subtree (current parent) balance factor == 2
 					if (newNode.getValue().compareTo(subtree.getRightChild().getValue()) == 1) {
 						// When current child balance factor == 1
@@ -204,11 +199,15 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 			// System.out.println("duplicated node");
 		}
 
+		// update height
+
 		// Uptade balance factor
 		if (subtree.getLeftChild() == null && subtree.getRightChild() != null) {
 			subtree.setBf(subtree.getRightChild().getBf() + 1);
+			height++;
 		} else if (subtree.getRightChild() == null && subtree.getLeftChild() != null) {
 			subtree.setBf(subtree.getLeftChild().getBf() + 1);
+			height++;
 		} else {
 			subtree.setBf(Math.max(getBf(subtree.getLeftChild()), getBf(subtree.getRightChild())) + 1);
 		}
@@ -233,19 +232,6 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 	}
 
 	/**
-	 * This method gets the height of tree
-	 * 
-	 * @param node
-	 * @return
-	 */
-	public int getHeight(NodeAVL node) {
-		if (node == null) {
-			return 0;
-		}
-		return Math.max(getHeight(node.getLeftChild()) + 1, getHeight(node.getRightChild()) + 1);
-	}
-
-	/**
 	 * This method shows the AVL tree in a preOrden way
 	 * 
 	 * @param root, this is the root of the AVL tree
@@ -256,6 +242,21 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 			preOrden(root.getLeftChild());
 			preOrden(root.getRightChild());
 		}
+	}
+
+	public int height() {
+		return height(root);
+	}
+
+	/**
+	 * This method calculates the height of the AVL tree
+	 * 
+	 * @param root, (T) NodeAVL, this is the root of the tree
+	 * @return int, this is the height of the tree
+	 */
+	private int height(NodeAVL<T> root) {
+		// TODO Auto-generated method stub
+		return height;
 	}
 
 }

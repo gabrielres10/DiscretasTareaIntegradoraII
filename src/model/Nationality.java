@@ -1,8 +1,6 @@
 package model;
 
-import java.io.Serializable;
-
-public enum Nationality implements Serializable{
+public enum Nationality{
 	USA, 
 	BRAZIL, 
 	MEXICO, 
