@@ -1,5 +1,8 @@
 package ui;
 
+import java.util.ArrayList;
+
+import generics.NodeAVL;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.DataBase;
@@ -29,10 +32,22 @@ public class AmericaDataBase {
 	 */
 	public void initDB() {
 		myDataBase.generateDataBase();
+		System.out.println(myDataBase.getPersonsDataBase().getHeight(myDataBase.getPersonsDataBase().getRoot()));
+		//myDataBase.showAllNames();
 	}
 	
 	
 	public static void searchWithName(String fullName) {
-		System.out.println(myDataBase.search(fullName).getValue().toString());
+		if(myDataBase.search(fullName) != null) {
+			NodeAVL<Person> coincidence = myDataBase.search(fullName);
+			String found = coincidence.getValue().toString();
+			System.out.println(found.equals(null)? "null": found);
+			ArrayList<String> twentyPersons = myDataBase.getTwentyPersons(coincidence);
+			for(String a : twentyPersons) {
+				System.out.println(a);
+			}
+		}else {
+			System.out.println("no hay coincidencia");
+		}
 	}
 }
