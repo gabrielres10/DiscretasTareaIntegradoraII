@@ -256,26 +256,5 @@ public class AVLTree<T extends Comparable<T>> implements Serializable {
 		}
 	}
 
-	public ArrayList<T> getTwentyNodes(NodeAVL<T> node) {
-		return getTwentyNodes(node, new ArrayList<T>());
-	}
-
-	private ArrayList<T> getTwentyNodes(NodeAVL<T> current, ArrayList<T> output) {
-		if (output.size() > 20 || current.getRightChild() == null && current.getLeftChild() == null) {
-			return output;
-		}
-		if (current.getLeftChild() == null && current.getRightChild() != null) {
-			output.add(current.getRightChild().getValue());
-			return getTwentyNodes(current.getRightChild(), output);
-		} else if (current.getRightChild() == null && current.getLeftChild() != null) {
-			output.add(current.getLeftChild().getValue());
-			return getTwentyNodes(current.getLeftChild(), output);
-		} else {
-			output.add(current.getRightChild().getValue());
-			output.add(current.getLeftChild().getValue());
-			return getTwentyNodes(current.getRightChild(), output);
-		}
-
-	}
 
 }

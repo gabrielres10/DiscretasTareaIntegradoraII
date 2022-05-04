@@ -5,9 +5,13 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
 import generics.AVLTree;
 import generics.NodeAVL;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DataBase {
 
@@ -48,15 +52,6 @@ public class DataBase {
 		}
 	}
 
-	/**
-	 * This method returns the node which contains the name entered as a parameter
-	 * 
-	 * @param fullName, String, this is the full name to find
-	 * @return (Person) NodeAVL, this is the node that contains the full name
-	 */
-	public NodeAVL<Person> search(String fullName) {
-		return search(personsDataBase.getRoot(), fullName);
-	}
 
 	/**
 	 * This method returns the String of the node (Person) which contains the name
@@ -72,20 +67,42 @@ public class DataBase {
 	}
 
 	/**
-	 * This method gets twenty persons of the AVL tree as an array of their String
-	 * form
+	 * This method runs the function that gets the next coincidences of a person
+	 * from a searched node
+	 * 
+	 * @param node, this is the node from which the method gets the next
+	 *              coincidences
+	 * @return(Person) ObservableList, this is the ObservableList of persons
+	 */
+	public ObservableList<Person> getNextCoincidences(NodeAVL<Person> node, String toSearch) {
+		ObservableList<Person> coincidencesList = FXCollections.observableArrayList();
+		return getNextCoincidences(coincidencesList, node, toSearch);
+	}
+
+	/**
+	 * This method gets the next persons of the AVL tree from a specific node as an
+	 * ObservableList of persons
 	 * 
 	 * @param node, this is the node that is parent of the twenty persons
-	 * @return (String) ArrayList, this is the array of the information of each
-	 *         person
+	 * @return (Person) ObservableList, this is the ObservableList of persons
 	 */
-	public ArrayList<String> getTwentyPersons(NodeAVL<Person> node) {
-		ArrayList<Person> twentyPeople = personsDataBase.getTwentyNodes(node);
-		ArrayList<String> output = new ArrayList<>();
-		for (Person person : twentyPeople) {
-			output.add(person.toString());
+	public ObservableList<Person> getNextCoincidences(ObservableList<Person> output, NodeAVL<Person> node,
+			String toSearch) {
+		if (node != null) {
+
+			NodeAVL<Person> foundNode = search(node, toSearch);
+			if (foundNode != null) {
+				output.add(foundNode.getValue());
+			}
+			if (output.size() > 15) {
+				System.out.println(" llego ");
+				return output;
+			}
+			getNextCoincidences(output, node.getLeftChild(), toSearch);
+			getNextCoincidences(output, node.getRightChild(), toSearch);
 		}
 		return output;
+
 	}
 
 	/**
@@ -107,7 +124,7 @@ public class DataBase {
 		if (root != null) {
 			System.out.println(root.getValue().getFullName() + " ");
 			try {
-				Thread.sleep(60000);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,26 +145,31 @@ public class DataBase {
 	private NodeAVL<Person> search(NodeAVL<Person> current, String toSearch) {
 		// Stop conditions of the search method
 		int srchLength = toSearch.length();
+		//System.out.println(toSearch + " tiene " + srchLength + " letras");
+		//System.out.println(current.getValue().getFullName() + " tiene " + current.getValue().getFullName().length() + " letras");
+		System.out.println(current.getValue().getFullName() + " es igual " + toSearch + "?");
 		if (personsDataBase.getRoot() == null || current == null) {
+			System.out.println(" current es null ");
 			return null;
 		} else if (srchLength > current.getValue().getFullName().length()) {
+			System.out.println(" el largo de la busqueda es mayor que el largo del nombre de current ");
 			return null;
 		}
 
 		String nodeName = current.getValue().getFullName().toUpperCase();
 		String coincidence = nodeName.substring(0, srchLength);
-
 		if (coincidence.equals(toSearch)) {
-			System.out.println("Encuentra la coincidencia");
+			
+			System.out.println(coincidence + " es igual " + toSearch);
 			return current;
 			// Iteration of the search method
 		} else if ((coincidence).compareTo(toSearch) < 0) {
-			System.out.println("recursividad por hijo derecho");
 			// if the value of the current node is smaller than the value that is being
 			// searched
+			System.out.println(coincidence + " es mayor que " + toSearch);
 			return search(current.getRightChild(), toSearch);
 		} else {
-			System.out.println("recursividad por hijo izquierdo");
+			System.out.println(coincidence + " es menor que " + toSearch);
 			// the value of the current node is bigger
 			return search(current.getLeftChild(), toSearch);
 		}
@@ -180,7 +202,7 @@ public class DataBase {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(personDataPath));
 		for (int i = 0; i < namesLength; i++) {
 			for (int j = 0; j < lastnamesLength; j++) {
-				Person current = new Person(x + "", names.get((int) Math.random() * namesLength + i).split(",")[0],
+				Person current = new Person(names.get((int) Math.random() * namesLength + i).split(",")[0],
 						lastnames.get(j + (int) Math.random() * lastnamesLength),
 						names.get(i + (int) Math.random() * namesLength).split(",")[1], popProp, x);
 				// System.out.println(current.toString());
