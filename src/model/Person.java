@@ -137,19 +137,17 @@ public class Person implements Comparable<Person>, Serializable {
 
 		int percent = rand.nextInt(100);
 
-		if(percent<19) {
-			year = (int)Math.random()*(2021-2008+1)+2008;
-		}else if(percent >= 19 && percent < 32) {
-			year = (int)Math.random()*(2007-1998+1)+1998;
-		}else if(percent >= 32 && percent < 71) {
-			year = (int)Math.random()*(1997-1968+1)+1968;
-		}else if(percent >= 71 && percent < 84) {
-			year = (int)Math.random()*(1967-1958+1)+1958;
-		}else if(percent >= 84) {
-			year = (int)Math.random()*(1957-1930+1)+1930;
+		if (percent < 19) {
+			year = 2008 + (int) (Math.random() * 2021);
+		} else if (percent >= 19 && percent < 32) {
+			year = 1998 + (int) (Math.random() * 2007);
+		} else if (percent >= 32 && percent < 71) {
+			year = 1968 + (int) (Math.random() * 1997);
+		} else if (percent >= 71 && percent < 84) {
+			year = 1958 + (int) (Math.random() * 1967);
+		} else if (percent >= 84) {
+			year = 1930 + (int) (Math.random() * 1957);
 		}
-		
-		System.out.println("year: " + year);
 
 		LocalDate birthDate = LocalDate.of(year, 1 + (int) Math.random() * (11), 1 + (int) Math.random() * (29));
 

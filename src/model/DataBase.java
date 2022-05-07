@@ -5,31 +5,23 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import generics.AVLTree;
-import generics.NodeAVL;
+import generics.Node;
 
-public class DataBase implements Serializable {
+public class DataBase {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private AVLTree<Person, NameComparator> dataSortedByName;
-	private AVLTree<Person, LastNameComparator> dataSortedByLastName;
-	private AVLTree<Person, FullNameComparator> dataSortedByFullName;
-	private AVLTree<Person, IdComparator> dataSortedById;
+	private AVLTree<Person> dataSortedByName;
+	private AVLTree<Person> dataSortedByLastName;
+	private AVLTree<Person> dataSortedByFullName;
+	private AVLTree<Person> dataSortedById;
+	private BufferedReader bf;
 	private String personDataPath;
 
-	transient InputStreamReader isr = new InputStreamReader(System.in);
-	transient BufferedReader bf = new BufferedReader(isr);
-
 	public DataBase() {
+		bf = null;
 		dataSortedByName = new AVLTree<>(new NameComparator());
 		dataSortedByLastName = new AVLTree<>(new LastNameComparator());
 		dataSortedByFullName = new AVLTree<>(new FullNameComparator());
@@ -37,123 +29,45 @@ public class DataBase implements Serializable {
 		personDataPath = "data/personsDataBase.csv";
 	}
 
-	class IdComparator implements Comparator<Person>, Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+	class IdComparator implements Comparator<Person> {
 
 		@Override
 		public int compare(Person o1, Person o2) {
-			// TODO Auto-generated method stub
 			return o1.getId().compareTo(o2.getId());
 		}
 	}
 
-	class FullNameComparator implements Comparator<Person>, Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+	class FullNameComparator implements Comparator<Person> {
 
 		@Override
 		public int compare(Person o1, Person o2) {
-			// TODO Auto-generated method stub
 			return o1.getFullName().compareTo(o2.getFullName());
 		}
 
 	}
 
-	class LastNameComparator implements Comparator<Person>, Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+	class LastNameComparator implements Comparator<Person> {
 
 		@Override
 		public int compare(Person o1, Person o2) {
-			// TODO Auto-generated method stub
 			return o1.getLastName().compareTo(o2.getLastName());
 		}
 	}
 
-	class NameComparator implements Comparator<Person>, Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+	class NameComparator implements Comparator<Person> {
 
 		@Override
 		public int compare(Person o1, Person o2) {
 			if (o1.getName().compareTo(o2.getName()) == 0) {
 				return o1.getLastName().compareTo(o2.getLastName());
 			} else {
-				// TODO Auto-generated method stub
 				return o1.getName().compareTo(o2.getName());
 			}
 		}
 
 	}
 
-	/**
-	 * @return the dataSortedByName
-	 */
-	public AVLTree<Person, NameComparator> getDataSortedByName() {
-		return dataSortedByName;
-	}
-
-	/**
-	 * @param dataSortedByName the dataSortedByName to set
-	 */
-	public void setDataSortedByName(AVLTree<Person, NameComparator> dataSortedByName) {
-		this.dataSortedByName = dataSortedByName;
-	}
-
-	/**
-	 * @return the dataSortedByLastName
-	 */
-	public AVLTree<Person, LastNameComparator> getDataSortedByLastName() {
-		return dataSortedByLastName;
-	}
-
-	/**
-	 * @param dataSortedByLastName the dataSortedByLastName to set
-	 */
-	public void setDataSortedByLastName(AVLTree<Person, LastNameComparator> dataSortedByLastName) {
-		this.dataSortedByLastName = dataSortedByLastName;
-	}
-
-	/**
-	 * @return the dataSortedByFullName
-	 */
-	public AVLTree<Person, FullNameComparator> getDataSortedByFullName() {
-		return dataSortedByFullName;
-	}
-
-	/**
-	 * @param dataSortedByFullName the dataSortedByFullName to set
-	 */
-	public void setDataSortedByFullName(AVLTree<Person, FullNameComparator> dataSortedByFullName) {
-		this.dataSortedByFullName = dataSortedByFullName;
-	}
-
-	/**
-	 * @return the dataSortedById
-	 */
-	public AVLTree<Person, IdComparator> getDataSortedById() {
-		return dataSortedById;
-	}
-
-	/**
-	 * @param dataSortedById the dataSortedById to set
-	 */
-	public void setDataSortedById(AVLTree<Person, IdComparator> dataSortedById) {
-		this.dataSortedById = dataSortedById;
-	}
+	// GETTERS AND SETTERS
 
 	/**
 	 * @return the personDataPath
@@ -163,11 +77,83 @@ public class DataBase implements Serializable {
 	}
 
 	/**
+	 * @return the dataSortedByName
+	 */
+	public AVLTree<Person> getDataSortedByName() {
+		return dataSortedByName;
+	}
+
+	/**
+	 * @param dataSortedByName the dataSortedByName to set
+	 */
+	public void setDataSortedByName(AVLTree<Person> dataSortedByName) {
+		this.dataSortedByName = dataSortedByName;
+	}
+
+	/**
+	 * @return the dataSortedByLastName
+	 */
+	public AVLTree<Person> getDataSortedByLastName() {
+		return dataSortedByLastName;
+	}
+
+	/**
+	 * @param dataSortedByLastName the dataSortedByLastName to set
+	 */
+	public void setDataSortedByLastName(AVLTree<Person> dataSortedByLastName) {
+		this.dataSortedByLastName = dataSortedByLastName;
+	}
+
+	/**
+	 * @return the dataSortedByFullName
+	 */
+	public AVLTree<Person> getDataSortedByFullName() {
+		return dataSortedByFullName;
+	}
+
+	/**
+	 * @param dataSortedByFullName the dataSortedByFullName to set
+	 */
+	public void setDataSortedByFullName(AVLTree<Person> dataSortedByFullName) {
+		this.dataSortedByFullName = dataSortedByFullName;
+	}
+
+	/**
+	 * @return the dataSortedById
+	 */
+	public AVLTree<Person> getDataSortedById() {
+		return dataSortedById;
+	}
+
+	/**
+	 * @param dataSortedById the dataSortedById to set
+	 */
+	public void setDataSortedById(AVLTree<Person> dataSortedById) {
+		this.dataSortedById = dataSortedById;
+	}
+
+	/**
+	 * @return the bf
+	 */
+	public BufferedReader getBf() {
+		return bf;
+	}
+
+	/**
+	 * @param bf the bf to set
+	 */
+	public void setBf(BufferedReader bf) {
+		this.bf = bf;
+	}
+
+	/**
 	 * @param personDataPath the personDataPath to set
 	 */
 	public void setPersonDataPath(String personDataPath) {
 		this.personDataPath = personDataPath;
 	}
+
+	// ---------- end of Getters and Setters
 
 	/**
 	 * This method runs the necessary methods in order to create the data base of
@@ -183,198 +169,175 @@ public class DataBase implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("altura por nombre: " + dataSortedByName.getHeight(dataSortedByName.getRoot()));
-		System.out.println("altura por apellido: " + dataSortedByLastName.getHeight(dataSortedByLastName.getRoot()));
-		System.out.println("altura por nombre comp: " + dataSortedByFullName.getHeight(dataSortedByFullName.getRoot()));
-		System.out.println("altura por codigo: " + dataSortedById.getHeight(dataSortedById.getRoot()));
+		System.out.println("altura por nombre: " + dataSortedByName.height(dataSortedByName.getRoot()));
+		System.out.println("altura por apellido: " + dataSortedByLastName.height(dataSortedByLastName.getRoot()));
+		System.out.println("altura por nombre comp: " + dataSortedByFullName.height(dataSortedByFullName.getRoot()));
+		System.out.println("altura por codigo: " + dataSortedById.height(dataSortedById.getRoot()));
 	}
 
 	/**
 	 * This method returns the node which contains the name entered as a parameter
 	 * 
 	 * @param fullName, String, this is the full name to find
-	 * @return (Person) NodeAVL, this is the node that contains the full name
+	 * @return (Person) Node, this is the node that contains the full name
 	 */
-	public NodeAVL<Person> searchByName(String name) {
-		return searchByName(dataSortedByName.getRoot(), name);
+	public Node<Person> searchBy(String value, int option) {
+		switch (option) {
+		case 0:
+			return searchBy(dataSortedByName.getRoot(), value, option);
+		case 1:
+			return searchBy(dataSortedByLastName.getRoot(), value, option);
+		case 2:
+			return searchBy(dataSortedByFullName.getRoot(), value, option);
+		case 3:
+			return searchBy(dataSortedById.getRoot(), value, option);
+		default:
+			return null;
+		}
 	}
 
 	/**
 	 * This method searches a node with a given value
 	 * 
 	 * @param value,   T, this is the value to be found
-	 * @param current, (T) NodeAVL this is the node of the iteration, in the first
-	 *                 time it will always be the root of the node
-	 * @return (T) NodeAVL, this is the node that contains the searched value
+	 * @param current, (T) Node this is the node of the iteration, in the first time
+	 *                 it will always be the root of the node
+	 * @return (T) Node, this is the node that contains the searched value
 	 */
-	public NodeAVL<Person> searchByName(NodeAVL<Person> raizTmp, String name) {
-		if (dataSortedByName == null) {
+	public Node<Person> searchBy(Node<Person> root, String value, int option) {
+		// Values are equivalent. Return the iterated node
+		if (root == null || compareValue(root, value, option) == 0) // 0
+			return root;
+
+		// Value is greater than root's value. Search in the right child
+		if (compareValue(root, value, option) < 0) // <0
+			return searchBy(root.getRight(), value, option);
+
+		// Value is smaller than root's value. Search in the left child
+		return searchBy(root.getLeft(), value, option);
+	}
+
+	private Integer compareValue(Node<Person> node, String value, int option) {
+		switch (option) {
+		case 0:
+			return node.getValue().getName().toUpperCase().compareTo(value.toUpperCase());
+		case 1:
+			return node.getValue().getLastName().toUpperCase().compareTo(value.toUpperCase());
+		case 2:
+			return node.getValue().getFullName().toUpperCase().compareTo(value.toUpperCase());
+		case 3:
+			return node.getValue().getId().toUpperCase().compareTo(value.toUpperCase());
+		default:
 			return null;
 		}
-
-		while (raizTmp.getRightChild() != null || raizTmp.getLeftChild() != null) {
-
-			if (name.compareTo(raizTmp.getValue().getName()) > 0) {
-				if (raizTmp.getRightChild() != null) {
-					raizTmp = raizTmp.getRightChild();
-				} else {
-					return null;
-				}
-			} else if (name.compareTo(raizTmp.getValue().getName()) < 0) {
-				if (raizTmp.getLeftChild() != null) {
-					raizTmp = raizTmp.getLeftChild();
-				} else {
-					return null;
-				}
-			}
-
-			if (name.compareTo(raizTmp.getValue().getName()) == 0) {
-				return raizTmp;
-			}
-		}
-
-		return raizTmp;
 	}
 
 	/**
 	 * This method returns the node which contains the name entered as a parameter
 	 * 
 	 * @param fullName, String, this is the full name to find
-	 * @return (Person) NodeAVL, this is the node that contains the full name
+	 * @return (Person) Node, this is the node that contains the full name
 	 */
-	public NodeAVL<Person> searchByLastName(String lastName) {
-		return searchByLastName(dataSortedByLastName.getRoot(), lastName);
+	public Node<Person> searchByPiece(String value, int option) {
+		if(value.equals("")) {
+			return null;
+		}
+		switch (option) {
+		case 0:
+			return searchByPiece(dataSortedByName.getRoot(), value, option);
+		case 1:
+			return searchByPiece(dataSortedByLastName.getRoot(), value, option);
+		case 2:
+			return searchByPiece(dataSortedByFullName.getRoot(), value, option);
+		case 3:
+			return searchByPiece(dataSortedById.getRoot(), value, option);
+		default:
+			return null;
+		}
 	}
 
 	/**
 	 * This method searches a node with a given value
 	 * 
 	 * @param value,   T, this is the value to be found
-	 * @param current, (T) NodeAVL this is the node of the iteration, in the first
-	 *                 time it will always be the root of the node
-	 * @return (T) NodeAVL, this is the node that contains the searched value
+	 * @param current, (T) Node this is the node of the iteration, in the first time
+	 *                 it will always be the root of the node
+	 * @return (T) Node, this is the node that contains the searched value
 	 */
-	public NodeAVL<Person> searchByLastName(NodeAVL<Person> raizTmp, String name) {
-		if (dataSortedByLastName == null) {
+	public Node<Person> searchByPiece(Node<Person> root, String value, int option) {
+		// System.out.println("searcByPiece");
+		// Values are equivalent. Return the iterated node
+		if (root == null) { // 0
+			return root;
+		} else if (comparePieceOfValue(root, value, option) == 0) {
+			return root;
+		}
+		// Value is greater than root's value. Search in the right child
+		if (comparePieceOfValue(root, value, option) < 0) // <0
+			return searchByPiece(root.getRight(), value, option);
+
+		// Value is smaller than root's value. Search in the left child
+		return searchByPiece(root.getLeft(), value, option);
+	}
+
+	private Integer comparePieceOfValue(Node<Person> node, String value, int option) {
+		switch (option) {
+		case 0:
+			if (value.length() <= node.getValue().getName().length()) {
+				return node.getValue().getName().toUpperCase().substring(0, value.length())
+						.compareTo(value.toUpperCase());
+			} else if (startsWith(node, value, option)) {
+				return 0;
+			} else {
+				return node.getValue().getName().toUpperCase().compareTo(value.toUpperCase());
+			}
+		case 1:
+			if (value.length() <= node.getValue().getLastName().length()) {
+				return node.getValue().getLastName().toUpperCase().substring(0, value.length())
+						.compareTo(value.toUpperCase());
+			} else if (startsWith(node, value, option)) {
+				return 0;
+			} else {
+				return node.getValue().getLastName().toUpperCase().compareTo(value.toUpperCase());
+			}
+
+		case 2:
+			if (value.length() <= node.getValue().getFullName().length()) {
+				return node.getValue().getFullName().toUpperCase().substring(0, value.length())
+						.compareTo(value.toUpperCase());
+			} else if (startsWith(node, value, option)) {
+				return 0;
+			} else {
+				return node.getValue().getFullName().toUpperCase().compareTo(value.toUpperCase());
+			}
+
+		case 3:
+			if (value.length() <= node.getValue().getId().length()) {
+				return node.getValue().getId().toUpperCase().substring(0, value.length())
+						.compareTo(value.toUpperCase());
+			} else if (startsWith(node, value, option)) {
+				return 0;
+			} else {
+				return node.getValue().getId().toUpperCase().compareTo(value.toUpperCase());
+			}
+		default:
 			return null;
 		}
-
-		while (raizTmp.getRightChild() != null || raizTmp.getLeftChild() != null) {
-
-			if (name.compareTo(raizTmp.getValue().getLastName()) > 0) {
-				if (raizTmp.getRightChild() != null) {
-					raizTmp = raizTmp.getRightChild();
-				} else {
-					return null;
-				}
-			} else if (name.compareTo(raizTmp.getValue().getLastName()) < 0) {
-				if (raizTmp.getLeftChild() != null) {
-					raizTmp = raizTmp.getLeftChild();
-				} else {
-					return null;
-				}
-			}
-
-			if (name.compareTo(raizTmp.getValue().getLastName()) == 0) {
-				return raizTmp;
-			}
-		}
-
-		return raizTmp;
 	}
 
-	/**
-	 * This method returns the node which contains the name entered as a parameter
-	 * 
-	 * @param fullName, String, this is the full name to find
-	 * @return (Person) NodeAVL, this is the node that contains the full name
-	 */
-	public NodeAVL<Person> searchByFullName(String fullName) {
-		return searchByFullName(dataSortedByFullName.getRoot(), fullName);
-	}
-
-	/**
-	 * This method searches a node with a given value
-	 * 
-	 * @param value,   T, this is the value to be found
-	 * @param current, (T) NodeAVL this is the node of the iteration, in the first
-	 *                 time it will always be the root of the node
-	 * @return (T) NodeAVL, this is the node that contains the searched value
-	 */
-	public NodeAVL<Person> searchByFullName(NodeAVL<Person> raizTmp, String name) {
-		if (dataSortedByFullName == null) {
-			return null;
+	private boolean startsWith(Node<Person> node, String value, int option) {
+		switch (option) {
+		case 0:
+			return node.getValue().getName().toUpperCase().startsWith(value.toUpperCase());
+		case 1:
+			return node.getValue().getLastName().toUpperCase().startsWith(value.toUpperCase());
+		case 2:
+			return node.getValue().getFullName().toUpperCase().startsWith(value.toUpperCase());
+		case 3:
+			return node.getValue().getId().toUpperCase().startsWith(value.toUpperCase());
+		default:
+			return false;
 		}
-
-		while (raizTmp.getRightChild() != null || raizTmp.getLeftChild() != null) {
-
-			if (name.compareTo(raizTmp.getValue().getFullName()) > 0) {
-				if (raizTmp.getRightChild() != null) {
-					raizTmp = raizTmp.getRightChild();
-				} else {
-					return null;
-				}
-			} else if (name.compareTo(raizTmp.getValue().getFullName()) < 0) {
-				if (raizTmp.getLeftChild() != null) {
-					raizTmp = raizTmp.getLeftChild();
-				} else {
-					return null;
-				}
-			}
-
-			if (name.compareTo(raizTmp.getValue().getFullName()) == 0) {
-				return raizTmp;
-			}
-		}
-
-		return raizTmp;
-	}
-
-	/**
-	 * This method returns the node which contains the name entered as a parameter
-	 * 
-	 * @param fullName, String, this is the full name to find
-	 * @return (Person) NodeAVL, this is the node that contains the full name
-	 */
-	public NodeAVL<Person> searchById(String id) {
-		return searchById(dataSortedById.getRoot(), id);
-	}
-
-	/**
-	 * This method searches a node with a given value
-	 * 
-	 * @param value,   T, this is the value to be found
-	 * @param current, (T) NodeAVL this is the node of the iteration, in the first
-	 *                 time it will always be the root of the node
-	 * @return (T) NodeAVL, this is the node that contains the searched value
-	 */
-	public NodeAVL<Person> searchById(NodeAVL<Person> raizTmp, String name) {
-		if (dataSortedById == null) {
-			return null;
-		}
-
-		while (raizTmp.getRightChild() != null || raizTmp.getLeftChild() != null) {
-
-			if (name.compareTo(raizTmp.getValue().getId()) > 0) {
-				if (raizTmp.getRightChild() != null) {
-					raizTmp = raizTmp.getRightChild();
-				} else {
-					return null;
-				}
-			} else if (name.compareTo(raizTmp.getValue().getId()) < 0) {
-				if (raizTmp.getLeftChild() != null) {
-					raizTmp = raizTmp.getLeftChild();
-				} else {
-					return null;
-				}
-			}
-
-			if (name.compareTo(raizTmp.getValue().getId()) == 0) {
-				return raizTmp;
-			}
-		}
-
-		return raizTmp;
 	}
 
 	/**
@@ -385,9 +348,10 @@ public class DataBase implements Serializable {
 	 *              coincidences
 	 * @return(Person) ObservableList, this is the ObservableList of persons
 	 */
-	public ArrayList<Person> getNextCoincidences(NodeAVL<Person> node, String toSearch, int type) {
+	public ArrayList<Person> getNextCoincidences(Node<Person> node, String toSearch, int type) {
 		ArrayList<Person> coincidencesList = new ArrayList<>();
-		return getNextCoincidences(coincidencesList, node, toSearch, type);
+		coincidencesList = getNextCoincidences(coincidencesList, node, toSearch, type);
+		return coincidencesList;
 	}
 
 	/**
@@ -397,28 +361,19 @@ public class DataBase implements Serializable {
 	 * @param node, this is the node that is parent of the twenty persons
 	 * @return (Person) ObservableList, this is the ObservableList of persons
 	 */
-	public ArrayList<Person> getNextCoincidences(ArrayList<Person> output, NodeAVL<Person> node, String toSearch,
+	public ArrayList<Person> getNextCoincidences(ArrayList<Person> output, Node<Person> node, String toSearch,
 			int type) {
-		if (node != null) {
-			NodeAVL<Person> foundNode = null;
-			if (type == 0) {
-				foundNode = searchByName(node, toSearch);
-			} else if (type == 1) {
-				foundNode = searchByLastName(node, toSearch);
-			} else if (type == 2) {
-				foundNode = searchByFullName(node, toSearch);
-			} else {
-				foundNode = searchById(node, toSearch);
-			}
-
+		if (node != null && output.size() < 101) {
+			Node<Person> foundNode = null;
+			foundNode = searchByPiece(node, toSearch, type);
+			getNextCoincidences(output, node.getLeft(), toSearch, type);
 			if (foundNode != null) {
-				output.add(foundNode.getValue());
+				if(!output.contains(foundNode.getValue())) {
+					output.add(foundNode.getValue());
+				}
 			}
-
-			getNextCoincidences(output, node.getLeftChild(), toSearch, type);
-			getNextCoincidences(output, node.getRightChild(), toSearch, type);
+			getNextCoincidences(output, node.getRight(), toSearch, type);
 		}
-
 		return output;
 
 	}
@@ -428,7 +383,7 @@ public class DataBase implements Serializable {
 	 * tree
 	 */
 	public void showAllNames() {
-		NodeAVL<Person> root = dataSortedByName.getRoot();
+		Node<Person> root = dataSortedByName.getRoot();
 		showAllNames(root);
 	}
 
@@ -438,17 +393,17 @@ public class DataBase implements Serializable {
 	 * 
 	 * @param root, this is the root of the AVL tree of persons
 	 */
-	public void showAllNames(NodeAVL<Person> root) {
+	public void showAllNames(Node<Person> root) {
 		if (root != null) {
-			System.out.println(root.getValue().getFullName() + " ");
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			showAllNames(root.getLeftChild());
-			showAllNames(root.getRightChild());
+			showAllNames(root.getLeft());
+			System.out.println(root.getValue().getFullName() + " ");
+			showAllNames(root.getRight());
 		}
 	}
 
@@ -475,6 +430,11 @@ public class DataBase implements Serializable {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(personDataPath));
 		for (int i = 0; i < namesLength; i++) {
 			for (int j = 0; j < lastnamesLength; j++) {
+				if (x == limit || limit == 0) {
+					i = namesLength;
+					break;
+				}
+				
 				Person current = new Person(x + "", names.get(i).split(",")[0], lastnames.get(j),
 						names.get(i).split(",")[1], popProp, x, limit);
 				dataSortedByName.insert(current);
@@ -482,10 +442,6 @@ public class DataBase implements Serializable {
 				dataSortedByFullName.insert(current);
 				dataSortedById.insert(current);
 				x++;
-				if (x == limit) {
-					i = namesLength;
-					j = lastnamesLength;
-				}
 			}
 			System.out.println(x);
 		}
@@ -502,6 +458,7 @@ public class DataBase implements Serializable {
 	private double[] readPopProp() {
 		// TODO Auto-generated method stub
 		double[] popProp = new double[55];
+
 		// Reads the information from a CSV file
 		try {
 			// Open .csv in buffer's reading mode
@@ -543,6 +500,7 @@ public class DataBase implements Serializable {
 	 */
 	private ArrayList<String> readNames() {
 		ArrayList<String> namesDB = new ArrayList<>();
+
 		// Reads the information from a CSV file
 		try {
 			// Open .csv in buffer's reading mode
@@ -584,6 +542,7 @@ public class DataBase implements Serializable {
 	private ArrayList<String> readLastNames() {
 		// TODO Auto-generated method stub
 		ArrayList<String> lastnamesDB = new ArrayList<>();
+
 		// Reads the information from a CSV file
 		try {
 			// Open .csv in buffer's reading mode
