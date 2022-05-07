@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SearchWindow">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SearchWindow">
    <children>
       <TableView fx:id="coincidencesTable" layoutX="48.0" layoutY="134.0" prefHeight="700.0" prefWidth="1500.0">
         <columns>
@@ -31,7 +31,7 @@
             <Image url="@../../Resource/search.png" />
          </image>
       </ImageView>
-      <TextField fx:id="searchTF" layoutX="154.0" layoutY="69.0" prefHeight="44.0" prefWidth="275.0" promptText="Select a search criteria">
+      <TextField fx:id="searchTF" layoutX="154.0" layoutY="69.0" onKeyReleased="#searchByPiece" prefHeight="44.0" prefWidth="275.0" promptText="Select a search criteria">
          <font>
             <Font size="20.0" />
          </font>
@@ -45,6 +45,9 @@
          <font>
             <Font size="20.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Label layoutX="732.0" layoutY="56.0" prefHeight="58.0" prefWidth="145.0" text="DELETE">
          <font>
@@ -56,10 +59,13 @@
             <Image url="@../../resource/user.png" />
          </image>
       </ImageView>
-      <Button fx:id="editPersonBTN" layoutX="993.0" layoutY="45.0" mnemonicParsing="false" onAction="#launchEditPerson" opacity="0.07" prefHeight="70.0" prefWidth="70.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
+      <Button fx:id="editPersonBTN" layoutX="993.0" layoutY="45.0" mnemonicParsing="false" opacity="0.07" prefHeight="70.0" prefWidth="70.0" style="-fx-border-color: #000000; -fx-border-width: 2;">
          <font>
             <Font size="20.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Label layoutX="1063.0" layoutY="55.0" prefHeight="58.0" prefWidth="145.0" text="EDIT">
          <font>
