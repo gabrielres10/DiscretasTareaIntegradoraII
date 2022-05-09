@@ -3,6 +3,7 @@ package view;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Gender;
 import model.Nationality;
@@ -36,7 +39,9 @@ public class SearchWindow implements Initializable {
 	@FXML
 	private Button deletePersonBTN;
 	@FXML
-	private Button editPersonBTN;
+	private Button editBTN;
+	@FXML
+	private Button deleteBTN;
 
 	// Images
 	@FXML
@@ -71,6 +76,9 @@ public class SearchWindow implements Initializable {
 	// Text Fields
 	@FXML
 	private TextField searchTF;
+    @FXML
+    private TextField coincidencesNumTF;
+
 
 	// Choice Boxes
 	@FXML
@@ -80,7 +88,9 @@ public class SearchWindow implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		// seaarchTV.setItems(Main.listaDeCoicidencias);
+		deleteBTN.setDisable(true);
 		fillSearchCriteriaCB();
+		editBTN.setDisable(true);
 		// Initialization of the columns in the table view
 		idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 		nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -121,9 +131,20 @@ public class SearchWindow implements Initializable {
 				type = 3;
 			}
 		}
-		AmericaDataBase.searchPersons(searchTF.getText(), type);
-		PeopleData.personsData.removeAll();
-		coincidencesTable.setItems(PeopleData.personsData);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				AmericaDataBase.searchPersons(searchTF.getText(), type);
+				PeopleData.personsData.removeAll();
+				if(PeopleData.personsData.size() <= 20) {
+					editBTN.setDisable(false);
+				}else {
+					editBTN.setDisable(true);
+				}
+				coincidencesTable.setItems(PeopleData.personsData);
+			}
+		}).start();
+		
 	}
 
 	@FXML
@@ -141,14 +162,69 @@ public class SearchWindow implements Initializable {
 		}
 		AmericaDataBase.searchPersons(searchTF.getText(), type);
 		PeopleData.personsData.removeAll();
+		if(PeopleData.personsData.size() <= 20) {
+			editBTN.setDisable(false);
+		}else {
+			editBTN.setDisable(true);
+		}
 		coincidencesTable.setItems(PeopleData.personsData);
+		coincidencesNumTF.setText("" + PeopleData.personsData.size());
+		
 	}
-
+	
+	/**
+	 * This method adds 
+	 */
+	public void addEditButtons() {
+		TableColumn<Person, Button> editCol = new TableColumn<>("Action");
+		editCol.setCellValueFactory(new PropertyValueFactory<>("btn"));
+		coincidencesTable.getColumns().add(editCol);
+	}
+	
 
     @FXML
     void launchEditPerson(ActionEvent event) {
+    	EditPersonWindow.personToEdit = (Person) coincidencesTable.getSelectionModel().getSelectedItem();
     	
+    	try {
+			launchEditPersonWindow(event);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
+	
+    /**
+	 * Deletes a person of the table
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void deletePerson(ActionEvent event) {
+		Person p = (Person) coincidencesTable.getSelectionModel().getSelectedItem();
+		AmericaDataBase.deletePerson(p);
+		deleteBTN.setDisable(true);
+		PeopleData.personsData.remove(p);
+		coincidencesTable.setItems(PeopleData.personsData);
+		coincidencesNumTF.setText("" + PeopleData.personsData.size());
+		AlertsCreator.loadAlert(AlertType.INFORMATION, "Success!", "Deletion successful", "The selected person was correctly deleted");
+	}
+	
+	/**
+	 * This method disables the add button when an item of the table is selected
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void enableBtns(MouseEvent event) {
+		if (coincidencesTable != null) {
+			List<Person> table = coincidencesTable.getSelectionModel().getSelectedItems();
+			if (table.size() == 1) {
+				deleteBTN.setDisable(false);
+				editBTN.setDisable(false);
+			}
+		}
+	}
 	
 	
 	@FXML
@@ -161,6 +237,33 @@ public class SearchWindow implements Initializable {
 		}
 	}
 
+	/**
+	 * This method launches add person window
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
+	public void launchEditPersonWindow(ActionEvent event) throws IOException {
+		FXMLLoader loader = new FXMLLoader(AmericaDataBase.class.getResource("../view/EditPersonWindow.fxml"));
+
+		Parent parent = (Parent) loader.load();
+
+		Stage stage = new Stage();
+
+		Scene scene = new Scene(parent);
+		stage.setScene(scene);
+		stage.show();
+
+		try {
+			Node source = (Node) event.getSource();
+			Stage old = (Stage) source.getScene().getWindow();
+			old.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * This method launches add person window
 	 * 

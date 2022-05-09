@@ -169,10 +169,25 @@ public class DataBase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("altura por nombre: " + dataSortedByName.height(dataSortedByName.getRoot()));
-		System.out.println("altura por apellido: " + dataSortedByLastName.height(dataSortedByLastName.getRoot()));
-		System.out.println("altura por nombre comp: " + dataSortedByFullName.height(dataSortedByFullName.getRoot()));
-		System.out.println("altura por codigo: " + dataSortedById.height(dataSortedById.getRoot()));
+		
+	}
+	
+	/**
+	 * This method deletes a person from all the trees
+	 * @param person, Person, this is the person to be deleted
+	 */
+	public void deletePerson(Person person) {
+		dataSortedByName.delete(person);
+		dataSortedByLastName.delete(person);
+		dataSortedByFullName.delete(person);
+		dataSortedById.delete(person);
+	}
+	
+	public void addPerson(Person person) {
+		getDataSortedByFullName().insert(person);
+		getDataSortedByName().insert(person);
+		getDataSortedByLastName().insert(person);
+		getDataSortedById().insert(person);
 	}
 
 	/**
@@ -265,7 +280,6 @@ public class DataBase {
 	 * @return (T) Node, this is the node that contains the searched value
 	 */
 	public Node<Person> searchByPiece(Node<Person> root, String value, int option) {
-		// System.out.println("searcByPiece");
 		// Values are equivalent. Return the iterated node
 		if (root == null) { // 0
 			return root;
@@ -402,7 +416,6 @@ public class DataBase {
 				e.printStackTrace();
 			}
 			showAllNames(root.getLeft());
-			System.out.println(root.getValue().getFullName() + " ");
 			showAllNames(root.getRight());
 		}
 	}
@@ -443,7 +456,6 @@ public class DataBase {
 				dataSortedById.insert(current);
 				x++;
 			}
-			System.out.println(x);
 		}
 		writer.close();
 	}

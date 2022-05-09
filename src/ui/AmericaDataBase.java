@@ -2,15 +2,12 @@ package ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import generics.Node;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.DataBase;
 import model.PeopleData;
@@ -56,34 +53,48 @@ public class AmericaDataBase extends Application {
 	 * "data/
 	 */
 	public static void initDB(int limit) {
-		myDataBase.generateDataBase(limit);
-		/*myDataBase.showAllNames();
-		System.out.println("preorden: ");
-		myDataBase.getDataSortedByName().preOrder(myDataBase.getDataSortedByName().getRoot());
-		*/
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				myDataBase.generateDataBase(limit);
+				;
+			}
+		}).start();
+
 		
+
 	}
 
-	public static void searchPersons(String fullName, int type) {
+	/**
+	 * This method searches a person by a criterion
+	 * 
+	 * @param value, String, this is the value of the person to be searched (it
+	 *               corresponds to a search criteria)
+	 * @param type, int, this is an integer to identify the search criterion
+	 */
+	public static void searchPersons(String value, int type) {
 		Node<Person> coincidence = null;
-		coincidence = myDataBase.searchByPiece(fullName,type);
-		System.out.println(type);
-		
-		ArrayList<Person> twentyPersons = myDataBase.getNextCoincidences(coincidence, fullName, type);
-		PeopleData.personsData.setAll(twentyPersons);
-		/*for (Person a : twentyPersons) {
-			System.out.println(a);
-		}*/
-		
-	}
-	
-	public static void insert(Person newPerson) {
-		myDataBase.getDataSortedByFullName().insert(newPerson);
-		myDataBase.getDataSortedByName().insert(newPerson);
-		myDataBase.getDataSortedByLastName().insert(newPerson);
-		myDataBase.getDataSortedById().insert(newPerson);
-	}
-	
+		coincidence = myDataBase.searchByPiece(value, type);
 
+		ArrayList<Person> twentyPersons = myDataBase.getNextCoincidences(coincidence, value, type);
+		PeopleData.personsData.setAll(twentyPersons);
+
+	}
+	
+	/**
+	 * This method deletes a person by executing deletePerson in DataBase class
+	 * @param person, this is the person to be deleted
+	 */
+	public static void deletePerson(Person person) {
+		myDataBase.deletePerson(person);
+	}
+	
+	/**
+	 * This method adds a new person by executing addPerson in DataBase class
+	 * @param newPerson, this is the new person 
+	 */
+	public static void addPerson(Person newPerson) {
+		myDataBase.addPerson(newPerson);
+	}
 
 }

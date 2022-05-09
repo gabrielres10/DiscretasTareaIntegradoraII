@@ -1,11 +1,8 @@
 package view;
 
 import java.io.IOException;
-
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -13,19 +10,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ui.AmericaDataBase;
 
@@ -33,6 +26,9 @@ public class GeneratePersonsWindow implements Initializable {
 
 	@FXML
 	private TextField amountOfPersonsTF;
+	
+	@FXML
+	private TextField timeTF;
 
 	@FXML
 	private Button generateDataBaseBTN;
@@ -49,6 +45,8 @@ public class GeneratePersonsWindow implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		timeTF.setEditable(false);
+		txtState.setText("");
 		// progress bar
 		progressBar.indeterminateProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -114,6 +112,17 @@ public class GeneratePersonsWindow implements Initializable {
 				pind.progressProperty().bind(task.progressProperty());
 				new Thread(task).start();
 				generateDataBase(event);
+				int i = 0;
+				while(task.isRunning()) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					timeTF.setText(i + " seconds");
+				}
+				AlertsCreator.loadAlert(Alert.AlertType.CONFIRMATION, "Confirmation", "People was generated successfully", "People generated: " + limit);
 			}
 		}
 
@@ -170,5 +179,6 @@ public class GeneratePersonsWindow implements Initializable {
 		stage.show();
 		
 	}
+	
 
 }

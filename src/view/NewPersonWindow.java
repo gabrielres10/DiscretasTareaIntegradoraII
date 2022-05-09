@@ -1,11 +1,11 @@
 package view;
 
 import java.io.IOException;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,7 +64,7 @@ public class NewPersonWindow implements Initializable {
 
 		Person person = new Person(name, lastName, gender, birthDate, height, nationality);
 
-		AmericaDataBase.insert(person);
+		AmericaDataBase.addPerson(person);
 		
 		try {
 			previousWindow(event);

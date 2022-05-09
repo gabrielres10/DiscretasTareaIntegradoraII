@@ -332,7 +332,6 @@ public class AVLTree<T> {
 		Stack<Node<T>> heap = new Stack<>();
 		while ((node != null && node.getValue() != null) || !heap.empty()) {
 			if (node != null) {
-				System.out.println(list.size()+1);
 				list.add(node.getValue());
 				heap.push(node);
 				node = node.getLeft();
@@ -382,7 +381,6 @@ public class AVLTree<T> {
 	 */
 	public void preOrder(Node<T> node) {
 		if (node != null) {
-			System.out.println(node.getValue() + " ");
 			preOrder(node.getLeft());
 			preOrder(node.getRight());
 		}
@@ -396,7 +394,6 @@ public class AVLTree<T> {
 	public void inOrder(Node<T> node) {
 		if (node != null) {
 			inOrder(node.getLeft());
-			System.out.println(node.getValue());
 			inOrder(node.getRight());
 		}
 	}

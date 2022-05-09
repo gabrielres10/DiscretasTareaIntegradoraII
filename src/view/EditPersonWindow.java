@@ -49,10 +49,10 @@ public class EditPersonWindow implements Initializable{
     @FXML
     private WebView webView;
 
-    
-    
     @FXML
     void accept(ActionEvent event) {
+    	
+    	AmericaDataBase.deletePerson(personToEdit);
     	
 		String name = nameTF.getText();
 
@@ -68,7 +68,7 @@ public class EditPersonWindow implements Initializable{
 
 		Person person = new Person(name, lastName, gender, birthDate, height, nationality);
 
-		AmericaDataBase.insert(person);
+		AmericaDataBase.addPerson(person);
 		
 		try {
 			previousWindow(event);
@@ -113,7 +113,7 @@ public class EditPersonWindow implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		birthDateDP.setValue(LocalDate.now());
+		birthDateDP.setValue(personToEdit.getBirthDate());
 
 		ArrayList<Gender> genders = new ArrayList<>();
 
