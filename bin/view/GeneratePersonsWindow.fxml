@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GeneratePersonsWindow">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GeneratePersonsWindow">
    <children>
       <Label layoutX="31.0" layoutY="114.0" prefHeight="28.0" prefWidth="453.0" text="How many persons do you want to generate?">
          <font>
@@ -25,7 +25,7 @@
          </cursor>
       </Button>
       <ProgressBar fx:id="progressBar" layoutX="31.0" layoutY="227.0" prefHeight="18.0" prefWidth="361.0" progress="0.0" />
-      <TextField layoutX="69.0" layoutY="251.0" prefHeight="25.0" prefWidth="78.0" />
+      <TextField fx:id="timeTF" layoutX="69.0" layoutY="251.0" prefHeight="25.0" prefWidth="78.0" />
       <Label layoutX="31.0" layoutY="255.0" text="Time" />
       <Label fx:id="txtState" layoutX="416.0" layoutY="268.0" text="Label" />
       <ProgressIndicator fx:id="pind" layoutX="417.0" layoutY="225.0" progress="0.0" />
